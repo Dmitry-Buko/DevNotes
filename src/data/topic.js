@@ -1,217 +1,289 @@
+// src/data/topics.js
 export const topics = [
   {
     id: "components",
-    path: "/components",
+    path: "components",
     title: "Components",
-    emoji: "🧩",
+    emoji: "🧱",
     content: [
-      { type: "p", text: "Компоненты — это основные строительные блоки React-приложения. Они позволяют разбивать интерфейс на независимые, переиспользуемые и легко тестируемые части, как LEGO." },
-      { type: "h", text: "Что такое компонент?" },
-      { type: "p", text: "Компонент — это функция или класс, который принимает данные (props) и возвращает React-элемент (JSX)." },
-      { type: "c", code: "function Welcome(props) {\n  return <h1>Привет, {props.name}!</h1>;\n}" },
-      { type: "h", text: "Функциональные компоненты (современный стандарт с React 16.8+)" },
-      { type: "c", code: "const Button = ({ text, onClick, variant = 'primary' }) => {\n  return (\n    <button className={`btn btn-${variant}`} onClick={onClick}>\n      {text}\n    </button>\n  );\n};" },
-      { type: "h", text: "Композиция компонентов вместо наследования" },
-      { type: "c", code: "<Layout>\n  <Header title=\"Мой сайт\" />\n  <Main>\n    <Sidebar />\n    <Content />\n  </Main>\n  <Footer />\n</Layout>" },
-      { type: "w", text: "Название компонента обязательно должно начинаться с заглавной буквы, иначе React воспримет его как обычный HTML-тег." },
+      { type: "p", text: "Компоненты — это фундамент React. Они позволяют разбивать сложный UI на небольшие, независимые, переиспользуемые и легко тестируемые части, подобно LEGO." },
+
+      { type: "h", text: "Основные характеристики компонентов" },
       { type: "l", items: [
-        "Один компонент — одна задача (Single Responsibility Principle)",
-        "Чем меньше компонент — тем проще его переиспользовать и тестировать",
-        "Логику выносим в кастомные хуки, UI оставляем в компоненте"
-      ]}
+        "Независимы и переиспользуемы",
+        "Поддерживают композицию (вложение одного компонента в другой)",
+        "Могут принимать props и иметь собственное состояние (state)",
+        "Всегда возвращают JSX, null или массив элементов",
+        "Могут быть функциональными или (устаревшими) классовыми"
+      ]},
+
+      { type: "h", text: "JSX и компоненты" },
+      { type: "p", text: "JSX — синтаксический сахар, который Babel преобразует в вызовы React.createElement()." },
+      { type: "c", code: "const element = <h1 className=\"title\">Привет, React!</h1>;\n\n// Эквивалентно:\nconst element = React.createElement(\n  'h1',\n  { className: 'title' },\n  'Привет, React!'\n);" },
+
+      { type: "h", text: "Stateless (Presentational) vs Stateful (Container) компоненты" },
+      { type: "l", items: [
+        "Stateless — получают данные только через props и просто рендерят UI (рекомендуется)",
+        "Stateful — управляют внутренним состоянием, side-effects и логикой",
+        "В современном React большинство компонентов — stateless + custom hooks для логики"
+      ]},
+      { type: "c", code: "// Stateless (Presentational)\nfunction Button({ text, onClick, variant = 'primary' }) {\n  return <button className={`btn-${variant}`} onClick={onClick}>{text}</button>;\n}\n\n// Stateful\nconst Counter = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <button onClick={() => setCount(prev => prev + 1)}>\n      Нажато {count} раз\n    </button>\n  );\n};" },
+
+      { type: "w", text: "Название компонента обязательно должно начинаться с заглавной буквы, иначе React воспримет его как HTML-тег." },
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/learn/your-first-component" }
     ]
   },
 
   {
     id: "props",
-    path: "/props",
+    path: "props",
     title: "Props",
     emoji: "📬",
     content: [
-      { type: "p", text: "Props (properties) — это объект, через который родительский компонент передаёт данные и функции дочернему. Props доступны только для чтения (immutable)." },
-      { type: "h", text: "Как работают props" },
-      { type: "c", code: "function UserCard({ name, age, isAdmin, children }) {\n  return (\n    <div className=\"card\">\n      <h3>{name}</h3>\n      <p>Возраст: {age}</p>\n      {isAdmin && <span className=\"badge\">ADMIN</span>}\n      {children}\n    </div>\n  );\n}\n\n<UserCard name=\"Анна\" age={25} isAdmin={true}>\n  <button>Редактировать</button>\n</UserCard>" },
-      { type: "h", text: "Значения по умолчанию и rest-параметры" },
-      { type: "c", code: "function Button({ text = 'Отправить', size = 'md', ...restProps }) {\n  return <button {...restProps} className={`btn-${size}`}>{text}</button>;\n}" },
+      { type: "p", text: "Props (properties) — механизм передачи данных от родительского компонента к дочернему. Props иммутабельны (только для чтения) и доступны внутри компонента через объект props." },
+
+      { type: "h", text: "Что можно передавать через props" },
+      { type: "l", items: [
+        "Примитивы: string, number, boolean",
+        "Сложные данные: объекты, массивы",
+        "Функции (обработчики событий)",
+        "JSX-элементы (через children)"
+      ]},
+
+      { type: "c", code: "function UserCard({ user, isOnline, children, onFollow }) {\n  return (\n    <div className=\"card\">\n      <img src={user.avatar} alt={user.name} />\n      <h3>{user.name}</h3>\n      <p>Онлайн: {isOnline ? '✅' : '❌'}</p>\n      <button onClick={onFollow}>Подписаться</button>\n      {children}\n    </div>\n  );\n}" },
+
+      { type: "h", text: "Деструктуризация и значения по умолчанию" },
+      { type: "c", code: "function Button({ text = 'Отправить', size = 'md', ...rest }) {\n  return <button className={`btn btn-${size}`} {...rest}>{text}</button>;\n}" },
+
       { type: "w", text: "Никогда не мутируй props! Если нужно изменить данные — поднимай состояние в родителя (Lifting State Up)." },
       { type: "l", items: [
-        "Props drilling — передача props через много уровней (решается Context или Composition)",
-        "Объекты, массивы и функции в props создаются заново при каждом рендере родителя",
-        "Для типизации используй TypeScript или PropTypes"
-      ]}
+        "Props drilling — передача через много уровней (решается Context или Composition)",
+        "При передаче объектов/массивов/функций они пересоздаются при каждом рендере родителя (влияет на оптимизацию)"
+      ]},
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/learn/passing-props-to-a-component" }
     ]
   },
 
   {
     id: "state",
-    path: "/state",
+    path: "state",
     title: "State",
     emoji: "⚡",
     content: [
-      { type: "p", text: "State — это внутренние данные компонента, которые могут меняться со временем. Каждое изменение state вызывает повторный рендер компонента." },
-      { type: "h", text: "useState — базовый хук" },
-      { type: "c", code: "import { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <button onClick={() => setCount(prev => prev + 1)}>\n      Нажато: {count} раз\n    </button>\n  );\n}" },
-      { type: "h", text: "Обновление сложных данных (массивы и объекты)" },
-      { type: "c", code: "setUsers(prev => [...prev, newUser]);\nsetFormData(prev => ({ ...prev, email: value }));\nsetTodos(prev => prev.filter(t => t.id !== deletedId));" },
-      { type: "w", text: "setState асинхронный! Поэтому после вызова setCount(count + 1) значение count всё ещё старое." },
+      { type: "p", text: "State — внутренние изменяемые данные компонента. Изменение state приводит к повторному рендеру компонента и его детей (если не оптимизировано)." },
+
+      { type: "h", text: "Сравнение Props и State" },
       { type: "l", items: [
-        "Используй функциональную форму обновления при зависимости от предыдущего состояния",
-        "Не храни в state вычисляемые данные (derived state)",
+        "Props приходят от родителя и только читаются",
+        "State создаётся и полностью управляется внутри компонента",
+        "Props — immutable, State — можно изменять через setter"
+      ]},
+
+      { type: "c", code: "import { useState } from 'react';\n\nfunction Form() {\n  const [formData, setFormData] = useState({ email: '', password: '' });\n\n  const handleChange = (e) => {\n    setFormData(prev => ({\n      ...prev,\n      [e.target.name]: e.target.value\n    }));\n  };\n\n  return <input name=\"email\" value={formData.email} onChange={handleChange} />;\n}" },
+
+      { type: "w", text: "setState асинхронный! Поэтому после setCount(count + 1) значение count остаётся старым. Всегда используй функциональную форму при зависимости от предыдущего состояния." },
+      { type: "l", items: [
+        "Для массивов и объектов всегда создавай новый экземпляр (...spread или map/filter)",
+        "Не храни в state данные, которые можно вычислить из props/state (derived state)",
         "Для очень сложной логики состояния используй useReducer"
-      ]}
+      ]},
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/reference/react/useState" }
     ]
   },
 
   {
     id: "lifecycle",
-    path: "/lifecycle",
+    path: "lifecycle",
     title: "LifeCycle",
     emoji: "🔄",
     content: [
-      { type: "p", text: "Жизненный цикл компонента — это этапы: монтирование, обновление, размонтирование. В функциональных компонентах всё управляется через useEffect." },
-      { type: "h", text: "useEffect — главный хук жизненного цикла" },
-      { type: "c", code: "import { useEffect } from 'react';\n\nfunction UserProfile({ userId }) {\n  useEffect(() => {\n    const controller = new AbortController();\n    fetch(`/api/user/${userId}`, { signal: controller.signal })\n      .then(res => res.json())\n      .then(setUser);\n\n    return () => controller.abort(); // cleanup\n  }, [userId]);\n}" },
-      { type: "w", text: "Массив зависимостей — самый важный момент! Забыл добавить переменную — получишь баг или бесконечный цикл." },
+      { type: "p", text: "Жизненный цикл компонента — это этапы его существования: монтирование (Mounting), обновление (Updating) и размонтирование (Unmounting)." },
+
+      { type: "h", text: "Классовые компоненты (устаревший подход)" },
       { type: "l", items: [
-        "[] — componentDidMount (один раз при монтировании)",
-        "[userId] — componentDidUpdate при изменении userId",
-        "Без массива — каждый рендер (обычно не нужно)"
-      ]}
+        "constructor() — инициализация state и привязка методов",
+        "componentDidMount() — после первого рендера (fetch, подписки)",
+        "componentDidUpdate(prevProps, prevState) — после обновления",
+        "componentWillUnmount() — перед удалением (очистка)"
+      ]},
+
+      { type: "h", text: "Функциональные компоненты — useEffect (современный стандарт)" },
+      { type: "c", code: "import { useEffect } from 'react';\n\nfunction UserProfile({ userId }) {\n  useEffect(() => {\n    fetchUser(userId);\n    return () => {\n      // cleanup\n    };\n  }, [userId]);\n}" },
+
+      { type: "h", text: "Подробное соответствие useEffect и классовых методов" },
+      { type: "l", items: [
+        "1. Mounting: useEffect(() => {}, []) — заменяет componentDidMount(). Выполняется только один раз после монтирования.",
+        "2. Updating: useEffect(() => {}, [dependency]) — заменяет componentDidUpdate(). Выполняется при изменении зависимостей.",
+        "3. Unmounting: useEffect(() => () => {}) — заменяет componentWillUnmount(). Возвращаемая функция выполняет очистку."
+      ]},
+
+      { type: "p", text: "useEffect без второго аргумента выполняется после каждого рендера (аналог componentDidMount + componentDidUpdate)." },
+      { type: "w", text: "При первом рендере useEffect всегда выполняется, даже если зависимости не изменились. Это нормальное поведение." },
+      { type: "w", text: "Неправильный массив зависимостей — одна из самых частых причин багов и бесконечных циклов в React." },
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/reference/react/useEffect" }
     ]
   },
 
   {
     id: "project-structure",
-    path: "/project-structure",
+    path: "project-structure",
     title: "Структура проекта. Modules VS FSD",
     emoji: "📁",
     content: [
-      { type: "p", text: "Modules — классическая структура по типу файлов. Feature-Sliced Design (FSD) — современная архитектура, где код группируется по бизнес-фичами." },
-      { type: "h", text: "Пример структуры FSD" },
-      { type: "c", code: "src/\n├── app/          # providers, routes, store\n├── processes/    # сложные сценарии (onboarding)\n├── pages/        # страницы приложения\n├── widgets/      # крупные самостоятельные блоки\n├── features/     # бизнес-фичи (auth, cart, payment)\n├── entities/     # бизнес-сущности (User, Product)\n└── shared/       # UI-kit, API, utils, constants" },
-      { type: "w", text: "FSD сильно упрощает масштабирование и работу в команде. Modules подходит только для маленьких проектов." }
+      { type: "p", text: "Правильная структура файлов сильно влияет на скорость разработки, поддержку и масштабирование проекта." },
+      { type: "h", text: "Сравнение двух подходов" },
+      { type: "l", items: [
+        "Modules (классика) — группировка по типу: components/, pages/, utils/, hooks/",
+        "Feature-Sliced Design (FSD) — группировка по бизнес-логике и слоям: features/, entities/, widgets/, shared/"
+      ]},
+      { type: "c", code: "// Пример FSD\nsrc/\n  ├── app/           // инициализация приложения\n  ├── features/      // бизнес-фичи (auth, cart)\n  ├── entities/      // бизнес-сущности (User, Product)\n  ├── widgets/       // крупные UI-блоки\n  ├── shared/        // переиспользуемое (ui, api, utils)" },
+      { type: "w", text: "FSD рекомендуется для средних и крупных проектов и команд. Modules достаточно для небольших приложений." },
+      { type: "doc", text: "📖 Официальная документация FSD", link: "https://feature-sliced.design/" }
     ]
   },
 
   {
     id: "virtual-dom",
-    path: "/virtual-dom",
+    path: "virtual-dom",
     title: "Virtual DOM. Reconciliation. Fiber",
     emoji: "🌳",
     content: [
-      { type: "p", text: "Virtual DOM — это JavaScript-объект, который React хранит в памяти. Это лёгкая копия реального DOM." },
-      { type: "p", text: "Reconciliation — алгоритм сравнения старого и нового Virtual DOM для нахождения минимальных изменений." },
-      { type: "p", text: "Fiber — новая внутренняя архитектура React (с 16 версии), которая разбивает работу на мелкие «фибры» и позволяет прерывать/приоритизировать рендер (Concurrent Rendering)." },
-      { type: "w", text: "Virtual DOM не делает приложение автоматически быстрым. Главное — не создавать лишние компоненты и правильно использовать keys." }
+      { type: "p", text: "Virtual DOM — это лёгкое JavaScript-представление реального DOM в памяти React." },
+      { type: "p", text: "Reconciliation — алгоритм сравнения (diffing) старого и нового Virtual DOM для определения минимальных изменений в реальном DOM." },
+      { type: "p", text: "Fiber — новая архитектура reconciler (с React 16), которая представляет работу рендера как связный список и позволяет прерывать/приоритизировать обновления (Concurrent Rendering)." },
+      { type: "w", text: "Virtual DOM не делает приложение автоматически быстрым. Важны правильные keys, мемоизация и разумная структура компонентов." },
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/learn/render-and-commit" }
     ]
   },
 
   {
     id: "events",
-    path: "/events",
+    path: "events",
     title: "Основные Events",
     emoji: "🖱️",
     content: [
       { type: "p", text: "React использует SyntheticEvent — свою кросс-браузерную обёртку над нативными событиями браузера." },
-      { type: "c", code: "function Form() {\n  const handleSubmit = (e) => {\n    e.preventDefault();     // обязательно!\n    e.stopPropagation();\n    console.log('Форма отправлена');\n  };\n\n  return <form onSubmit={handleSubmit}>...</form>;\n}" },
-      { type: "w", text: "SyntheticEvent обнуляется после обработчика. Если нужно сохранить — сохраняй нужные свойства или используй e.persist() (устарело)." }
+      { type: "c", code: "function Form() {\n  const handleSubmit = (e) => {\n    e.preventDefault(); // обязательно для форм!\n    e.stopPropagation();\n    console.log('Форма отправлена');\n  };\n  return <form onSubmit={handleSubmit}>...</form>;\n}" },
+      { type: "l", items: [
+        "Все события в camelCase: onClick, onChange, onSubmit, onKeyDown",
+        "SyntheticEvent пулится (обнуляется после обработчика) — сохраняй нужные данные, если используешь асинхронно",
+        "Для глобальных событий (document, window) используй useEffect"
+      ]},
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/learn/responding-to-events" }
     ]
   },
 
   {
     id: "additions",
-    path: "/additions",
+    path: "additions",
     title: "Дополнения (key, Fragments, refs, StrictMode)",
     emoji: "🛠️",
     content: [
       { type: "h", text: "key — обязательный атрибут в списках" },
-      { type: "c", code: "todos.map(todo => <TodoItem key={todo.id} todo={todo} />)" },
-      { type: "h", text: "Fragments <> </> — не создаёт лишний DOM-узел" },
-      { type: "c", code: "<>\n  <h1>Заголовок</h1>\n  <p>Текст</p>\n</>" },
-      { type: "h", text: "useRef — ссылка на DOM-элемент или значение" },
-      { type: "c", code: "const inputRef = useRef(null);\n\nuseEffect(() => {\n  inputRef.current.focus();\n}, []);\n\n<input ref={inputRef} />" },
-      { type: "w", text: "StrictMode в development режиме дважды вызывает useEffect и некоторые хуки — это специально, чтобы находить баги." }
+      { type: "c", code: "items.map(item => <Item key={item.id} item={item} />)" },
+      { type: "h", text: "React.Fragment / <> </> — не создаёт лишний DOM-узел" },
+      { type: "c", code: "<>\n  <Header />\n  <Main />\n  <Footer />\n</>" },
+      { type: "h", text: "useRef — ссылка на DOM-элемент или сохранённое значение" },
+      { type: "c", code: "const inputRef = useRef(null);\nuseEffect(() => inputRef.current.focus(), []);\n<input ref={inputRef} />" },
+      { type: "w", text: "StrictMode в development специально вызывает эффекты дважды, чтобы выявить проблемы с side-effects." },
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/reference/react/StrictMode" }
     ]
   },
 
   {
     id: "optimization",
-    path: "/optimization",
-    title: "Оптимизация (memo, useMemo, useCallback, lazy, Suspense, Profiler)",
-    emoji: "⚡",
+    path: "optimization",
+    title: "Оптимизация (memo, useMemo, useCallback, lazy, Suspense)",
+    emoji: "🚀",
     content: [
-      { type: "h", text: "React.memo, useMemo, useCallback" },
-      { type: "c", code: "const MemoComponent = React.memo(MyComponent);\n\nconst expensiveValue = useMemo(() => calculate(data), [data]);\n\nconst handleClick = useCallback(() => save(id), [id]);" },
+      { type: "h", text: "React.memo — мемоизация компонента" },
+      { type: "p", text: "React.memo — HOC, который предотвращает повторный рендер, если props не изменились." },
+      { type: "c", code: "const UserCard = React.memo(({ user }) => {\n  console.log('Ререндер UserCard');\n  return <p>{user.name}</p>;\n});\n\nconst areEqual = (prev, next) => prev.user.id === next.user.id;\nconst MemoizedCard = React.memo(UserCard, areEqual);" },
+
+      { type: "h", text: "useMemo и useCallback" },
+      { type: "c", code: "const expensiveValue = useMemo(() => calculate(data), [data]);\nconst handleClick = useCallback((id) => save(id), [id]);" },
+
       { type: "h", text: "Code Splitting + Suspense" },
-      { type: "c", code: "const HeavyComponent = lazy(() => import('./HeavyComponent'));\n\n<Suspense fallback={<Spinner />}>\n  <HeavyComponent />\n</Suspense>" },
-      { type: "w", text: "Не оборачивай всё подряд в memo/useMemo — overhead может быть больше пользы. Оптимизируй только узкие места." },
-      { type: "p", text: "Profiler — инструмент для измерения производительности компонентов в React DevTools." }
+      { type: "c", code: "const Heavy = lazy(() => import('./HeavyComponent'));\n<Suspense fallback={<Spinner />}>\n  <Heavy />\n</Suspense>" },
+
+      { type: "w", text: "Избыточная мемоизация добавляет overhead. Используй только там, где действительно есть проблема производительности." },
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/learn/performance" }
     ]
   },
 
   {
     id: "context",
-    path: "/context",
+    path: "context",
     title: "Context",
     emoji: "🌐",
     content: [
-      { type: "p", text: "Context API позволяет передавать данные глубоко по дереву компонентов без пропсов (prop drilling)." },
+      { type: "p", text: "Context API позволяет передавать данные глубоко по дереву компонентов без prop drilling." },
       { type: "c", code: "const ThemeContext = createContext('light');\n\nfunction App() {\n  const [theme, setTheme] = useState('light');\n  return (\n    <ThemeContext.Provider value={{ theme, setTheme }}>\n      <Layout />\n    </ThemeContext.Provider>\n  );\n}" },
-      { type: "w", text: "Любое изменение value вызывает ре-рендер всех компонентов, использующих useContext. Для частых обновлений лучше использовать внешний state + useMemo." }
+      { type: "w", text: "Изменение value в Provider вызывает ре-рендер всех потребителей контекста. Для частых обновлений мемоизируй значение." },
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/learn/passing-data-deeply-with-context" }
     ]
   },
 
   {
     id: "hoc",
-    path: "/hoc",
+    path: "hoc",
     title: "HOC (Higher-Order Components)",
     emoji: "🎩",
     content: [
-      { type: "p", text: "Higher-Order Component — это функция, которая принимает компонент и возвращает новый, обогащённый компонент." },
-      { type: "c", code: "function withLogger(WrappedComponent) {\n  return function WithLogger(props) {\n    useEffect(() => {\n      console.log('Компонент', WrappedComponent.name, 'смонтирован');\n    }, []);\n    return <WrappedComponent {...props} />;\n  };\n}\n\nconst EnhancedButton = withLogger(Button);" },
-      { type: "w", text: "Сегодня HOC почти всегда можно и нужно заменять на кастомные хуки — они проще в использовании и отладке." }
+      { type: "p", text: "HOC — функция высшего порядка, которая принимает компонент и возвращает новый компонент с дополнительной функциональностью." },
+      { type: "c", code: "function withLogger(WrappedComponent) {\n  return function WithLogger(props) {\n    useEffect(() => console.log('Mounted:', WrappedComponent.name), []);\n    return <WrappedComponent {...props} />;\n  };\n}\n\nconst EnhancedButton = withLogger(Button);" },
+      { type: "w", text: "В современном React кастомные хуки обычно предпочтительнее HOC из-за простоты и лучшей читаемости." },
+      { type: "doc", text: "📖 Официальная документация", link: "https://legacy.reactjs.org/docs/higher-order-components.html" }
     ]
   },
 
   {
     id: "routing",
-    path: "/routing",
+    path: "routing",
     title: "Routing (React Router)",
     emoji: "🛤️",
     content: [
-      { type: "c", code: "import { BrowserRouter, Routes, Route } from 'react-router-dom';\n\n<BrowserRouter>\n  <Routes>\n    <Route path='/' element={<Home />} />\n    <Route path='/users/:id' element={<UserProfile />} />\n  </Routes>\n</BrowserRouter>" },
+      { type: "p", text: "React Router — де-факто стандарт для маршрутизации в React-приложениях (SPA)." },
+      { type: "c", code: "<BrowserRouter>\n  <Routes>\n    <Route path=\"/\" element={<Home />} />\n    <Route path=\"/users/:id\" element={<UserProfile />} />\n  </Routes>\n</BrowserRouter>" },
       { type: "l", items: [
-        "useParams() — достать динамические параметры URL",
-        "useNavigate() — перейти программно",
-        "Outlet — рендер вложенных роутов",
-        "Data Router (loader/action) — современный способ загружать данные"
-      ]}
+        "useParams() — динамические параметры URL",
+        "useNavigate() — программная навигация",
+        "Outlet — рендер вложенных маршрутов",
+        "Data Router (loader/action) — современный способ работы с данными"
+      ]},
+      { type: "doc", text: "📖 Официальная документация", link: "https://reactrouter.com/" }
     ]
   },
 
   {
     id: "storages",
-    path: "/storages",
+    path: "storages",
     title: "Storages (localStorage, sessionStorage)",
     emoji: "💾",
     content: [
-      { type: "c", code: "localStorage.setItem('theme', 'dark');\nconst theme = localStorage.getItem('theme');\n\n// JSON\nlocalStorage.setItem('cart', JSON.stringify(cart));\nconst cart = JSON.parse(localStorage.getItem('cart')) || [];" },
-      { type: "w", text: "localStorage и sessionStorage работают только на клиенте. При SSR (Next.js) обязательно проверяй if (typeof window !== 'undefined')." }
+      { type: "p", text: "localStorage сохраняет данные даже после закрытия браузера. sessionStorage очищается при закрытии вкладки." },
+      { type: "c", code: "localStorage.setItem('theme', 'dark');\nconst theme = localStorage.getItem('theme');\n\n// Работа с JSON\nlocalStorage.setItem('user', JSON.stringify(user));\nconst savedUser = JSON.parse(localStorage.getItem('user')) || {};" },
+      { type: "w", text: "Эти API доступны только на клиенте. В SSR-приложениях (Next.js) обязательно проверяй typeof window !== 'undefined'." },
+      { type: "doc", text: "📖 MDN Web Docs", link: "https://developer.mozilla.org/ru/docs/Web/API/Window/localStorage" }
     ]
   },
 
   {
     id: "hooks",
-    path: "/hooks",
-    title: "Хуки: useId, useReducer, useTransition, useOptimistic",
-    emoji: "💾",
+    path: "hooks",
+    title: "Хуки",
+    emoji: "🪝",
     content: [
-      { type: "h", text: "useId — уникальные ID для доступности" },
-      { type: "c", code: "const id = useId();\n<label htmlFor={id}>Имя:</label>\n<input id={id} />" },
-      { type: "h", text: "useReducer — для сложной логики состояния" },
-      { type: "h", text: "useTransition — пометить обновление как «не срочное» (плавный UI)" },
-      { type: "h", text: "useOptimistic (React 19) — оптимистичные обновления UI до ответа сервера" },
-      { type: "w", text: "Эти хуки особенно полезны в сложных формах, фильтрах и при работе с серверными данными." }
+      { type: "p", text: "Хуки позволяют использовать состояние, жизненный цикл и другие React-функции в функциональных компонентах." },
+      { type: "h", text: "Важные хуки из списка" },
+      { type: "l", items: [
+        "useId — генерация стабильных уникальных ID для доступности (a11y)",
+        "useReducer — управление сложным состоянием (альтернатива useState)",
+        "useTransition — пометка обновлений как \"не срочных\" для плавного UX",
+        "useOptimistic (React 19) — оптимистичные обновления интерфейса до ответа сервера"
+      ]},
+      { type: "w", text: "Хуки можно вызывать только на верхнем уровне компонента (нельзя в условиях, циклах или вложенных функциях)." },
+      { type: "doc", text: "📖 Официальная документация", link: "https://react.dev/reference/react" }
     ]
   }
 ];

@@ -1,10 +1,13 @@
+import { Outlet } from "react-router-dom";
 import TopicPage from "./TopicPage";
 import NavBar from "./NavBar";
-import { Outlet } from "react-router-dom";
+import { useContext } from "react";
+import {ThemeContext} from "../provider/ThemeContext";
 
 const Layout = () => {
+  const {theme} = useContext(ThemeContext)
   return (
-    <div className="container">
+    <div className={`container ${theme}`}>
       <NavBar />
       <main>
         <Outlet />

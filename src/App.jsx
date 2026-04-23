@@ -16,7 +16,7 @@ function App() {
           {topics.map((topic) => (
             <Route
               key={topic.id}
-              path={topic.id}
+              path={topic.path}
               element={<TopicPage topic={topic} />}
             />
           ))}

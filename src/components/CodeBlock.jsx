@@ -7,7 +7,6 @@ const CodeBlock = ({ code }) => {
   useEffect(() => {
     Prism.highlightAll();
   }, [code]);
-console.log(JSON.stringify(code))
   return (
     <pre>
       <code className="language-jsx">{code}</code>
