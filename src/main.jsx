@@ -6,7 +6,7 @@ import App from "./App.jsx";
 import ThemeContext from "./provider/ThemeProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
-    <BrowserRouter>
+    <BrowserRouter basename="/DevNotes">
       <ThemeContext>
         <App />
       </ThemeContext>
