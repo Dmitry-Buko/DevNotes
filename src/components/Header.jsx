@@ -8,7 +8,7 @@ const Header = () => {
     <header className={`header ${theme}`}>
       <img className="header__logo" src={logo} alt="logo" />
       <button className="header__toogle-theme" onClick={toggleTheme}>
-        Переключить тему
+        Переключить на {theme === "dark" ? "светлую" : "темную"} тему
       </button>
       <a className="header__github" href="https://github.com/Dmitry-Buko">
         <img

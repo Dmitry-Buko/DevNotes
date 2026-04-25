@@ -26,10 +26,10 @@ const TopicPage = ({ topic }) => {
               return <CodeBlock key={index} code={item.code} />;
             case "w":
               return (
-                <div key={index} className="topic-page__warning">
+                <p key={index} className="topic-page__warning">
                   ⚠️<strong>Важно: </strong>
                   {item.text}
-                </div>
+                </p>
               );
             case "l":
               return (
@@ -41,14 +41,16 @@ const TopicPage = ({ topic }) => {
               );
             case "doc":
               return (
-                <a
-                  key={index}
-                  href={item.link}
-                  target="_blank"
-                  className="topic-page__doc-link"
-                >
-                  {item.text} →
-                </a>
+                <div className="topic-page__doc-link-wrap">
+                  <a
+                    key={index}
+                    href={item.link}
+                    target="_blank"
+                    className="topic-page__doc-link"
+                  >
+                    {item.text} →
+                  </a>
+                </div>
               );
 
             default:
